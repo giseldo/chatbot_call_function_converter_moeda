@@ -2,7 +2,9 @@ from openai import OpenAI
 import gradio as gr
 import json
 
-client = OpenAI()
+
+txt_openAI = gr.Textbox(label="Digite a sua chave de API da OpenAI", type="password", placeholder="sk-...")
+client = OpenAI(api_key=txt_openAI)
 
 taxa = {
     "EUR": 0.93,
@@ -58,7 +60,7 @@ tools_moeda = [
     }
 ]
 
-def response_fn(message, history):
+def response_fn(message, history, txt_openAI):
     openai_history = []
 
     openai_history.append({"role": "user", "content": message})
@@ -95,5 +97,6 @@ def response_fn(message, history):
 
     return response.output_text
     
-gr.ChatInterface(response_fn, type="messages").launch()
+
+gr.ChatInterface(response_fn, type="messages", additional_inputs=[txt_openAI]).launch()
 
